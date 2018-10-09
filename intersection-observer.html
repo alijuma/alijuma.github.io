@@ -1,0 +1,330 @@
+<!doctype html>
+<!-- Forked from https://bl.ocks.org/nolanlawson/raw/bba9cd9b2459a413f4ca0e5f5902ca43/ -->
+<html lang="en">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<head>
+  <title>IntersectionObserver demo</title>
+  <style>
+    body {
+      margin: 0 auto;
+      padding: 10px;
+      max-width: 800px;
+      height: 8000px; 
+    }
+    .container1 {
+      width: 50px;
+      height: 600px;
+      overflow-y: scroll;
+      position: absolute;
+      left: 10px;
+      -webkit-overflow-scrolling: touch;
+    }
+    .container2 {
+      width: 50px;
+      height: 600px;
+      overflow-y: scroll;
+      position: absolute;
+      left: 10px;
+      top: 900px;
+      -webkit-overflow-scrolling: touch;
+    }
+
+    .container3 {
+      width: 50px;
+      height: 600px;
+      overflow-y: scroll;
+      position: absolute;
+      left: 10px;
+      top: 1800px;
+      -webkit-overflow-scrolling: touch;
+    }
+    .box {
+      height: 100px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      border: none;
+      margin: 0;
+      padding: 0;
+    }
+    .box:nth-child(even) {
+      background: #aaa;
+    }
+    .box:nth-child(odd) {
+      background: #ccc;
+    }
+    .box2 {
+      height: 100px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      border: none;
+      margin: 0;
+      padding: 0;
+    }
+    .box2:nth-child(even) {
+      background: #aaa;
+    }
+    .box2:nth-child(odd) {
+      background: #ccc;
+    }
+    .display {
+      width: 200px;
+      height: 100%;
+      margin-left: 50px;
+    }
+
+    #output {
+      position: fixed;
+      left: 55px;
+      bottom: 5px;
+      overflow: scroll;
+      -webkit-overflow-scrolling: touch;
+      width: 200px;
+      height: 150px;
+    }
+
+    #controls {
+      padding: 5px; 
+      position: absolute;
+      top: 0px;
+      left: 100px;
+    }
+  </style>
+</head>
+<body>
+<div class="container1">
+  <div id="box0" class="box">
+    Box 0
+  </div>
+  <div id="box1" class="box">
+    Box 1
+  </div>
+  <div id="box2" class="box">
+    Box 2
+  </div>
+  <div id="box3" class="box">
+    Box 3
+  </div>
+  <div id="box4" class="box">
+    Box 4
+  </div>
+  <div id="box5" class="box">
+    Box 5
+  </div>
+  <div id="box6" class="box">
+    Box 6
+  </div>
+  <div id="box7" class="box">
+    Box 7
+  </div>
+  <div id="box8" class="box">
+    Box 8
+  </div>
+  <div id="box9" class="box">
+    Box 9
+  </div>
+</div>
+<div class="container2">
+  <div id="box10" class="box2">
+    Box 10
+  </div>
+  <div id="box11" class="box2">
+    Box 11
+  </div>
+  <div id="box12" class="box2">
+    Box 12
+  </div>
+  <div id="box13" class="box2">
+    Box 13
+  </div>
+  <div id="box14" class="box2">
+    Box 14
+  </div>
+  <div id="box15" class="box2">
+    Box 15
+  </div>
+  <div id="box16" class="box2">
+    Box 16
+  </div>
+  <div id="box17" class="box2">
+    Box 17
+  </div>
+  <div id="box18" class="box2">
+    Box 18
+  </div>
+  <div id="box19" class="box2">
+    Box 19
+  </div>
+</div>
+<div class="container3">
+  <iframe id="box20" class="box3" src="intersection-observer-frame.html">
+  </iframe>
+  <iframe id="box21" class="box3" src="intersection-observer-frame.html">
+  </iframe>
+  <iframe id="box22" class="box3" src="intersection-observer-frame.html" >
+  </iframe>
+  <iframe id="box23" class="box3" src="intersection-observer-frame.html" >
+  </iframe>
+  <iframe id="box24" class="box3" src="intersection-observer-frame.html">
+  </iframe>
+  <iframe id="box25" class="box3" src="intersection-observer-frame.html">
+  </iframe>
+  <iframe id="box26" class="box3" src="intersection-observer-frame.html">
+  </iframe>
+  <iframe id="box27" class="box3" src="intersection-observer-frame.html">
+  </iframe>
+  <iframe id="box28" class="box3" src="intersection-observer-frame.html">
+  </iframe>
+  <iframe id="box29" class="box3" src="intersection-observer-frame.html">
+  </iframe>
+</div>
+<div id="output">
+  <pre id="display" class="display">Output:
+</pre>
+</div>
+<div id="controls">
+Fields to include:
+<div>
+  <input type="checkbox" id="isIntersecting" name="field"
+               value="isIntersecting"/>
+  <label for="isIntersecting">isIntersecting</label>
+</div>
+<div>
+  <input type="checkbox" id="ratio" name="field"
+               value="ratio" />
+  <label for="ratio">ratio</label>
+</div>
+<div>
+  <input type="checkbox" id="rootBounds" name="field"
+               value="rootBounds" />
+  <label for="rootBounds">rootBounds</label>
+</div>
+<div>
+  <input type="checkbox" id="boundingClientRect" name="field"
+               value="boundingClientRect" />
+  <label for="boundingClientRect">boundingClientRect</label>
+</div>
+<div>
+  <input type="checkbox" id="intersectionRect" name="field"
+               value="intersectionRect" />
+  <label for="intersectionRect">intersectionRect</label>
+</div>
+<div>
+  <label for="threshold">Threshold:</label>
+  <input type="text" id="threshold" name="threshold" value="0.0" size="5"></input>
+</div>
+Types:
+<div>
+  <input type="checkbox" id="explicitRoot" name="type"
+               value="explicitRoot" />
+  <label for="explicitRoot">Explicit root</label>
+</div>
+<div>
+  <input type="checkbox" id="implicitRoot" name="type"
+               value="implicitRoot" />
+  <label for="implicitRoot">Implicit root</label>
+</div>
+<div>
+  <input type="checkbox" id="crossDoc" name="type"
+               value="crossDoc" />
+  <label for="crossDoc">Cross document</label>
+</div>
+<div>
+  <button onclick="resetObservers()">Reset</button>
+</div>
+
+<script>
+var observer;
+var observer2;
+var observer3;
+
+const $ = document.querySelector.bind(document)
+const $$ = _ => Array.from(document.querySelectorAll(_))
+const display = $('.display')
+
+function log(str) {
+  display.textContent += (str || '') + '\n';
+  var output = document.getElementById('output');
+  output.scrollTop = output.scrollHeight;
+}
+
+function domRectToString(rect) {
+  return `(${rect.x},${rect.y}) ${rect.width}x${rect.height}`
+}
+
+function onObserve(entries) {
+  entries.forEach(entry => {
+    const {
+      isIntersecting,
+      intersectionRatio,
+      rootBounds,
+      boundingClientRect,
+      intersectionRect,
+    } = entry
+    const id = entry.target.id
+    var output = `${id}`;
+    if (document.getElementById('isIntersecting').checked)
+      output+= `, ${isIntersecting}`;
+    if (document.getElementById('ratio').checked)
+      output+= `, ratio: ${Number.parseFloat(intersectionRatio).toFixed(3)}`;
+    if (document.getElementById('rootBounds').checked)
+      output+= ", rB: " + domRectToString(rootBounds);
+    if (document.getElementById('boundingClientRect').checked)
+      output+= ", bCRect: " + domRectToString(boundingClientRect);
+    if (document.getElementById('intersectionRect').checked)
+      output+= ", iRect: " + domRectToString(intersectionRect);
+    log(output);
+  })
+}
+
+
+function resetObservers() {
+  display.textContent = `\n`;
+  if (observer)
+    observer.disconnect();
+  if (observer2)
+    observer2.disconnect();
+  if (observer3)
+    observer3.disconnect();
+
+  var thresholdValue = Number.parseFloat(document.getElementById('threshold').value);
+
+  if (document.getElementById('explicitRoot').checked) {
+    observer = new IntersectionObserver(onObserve, {
+      root: $('.container1'),
+      threshold: thresholdValue
+    })
+    $$('.box').forEach(el => {
+      observer.observe(el)
+    })
+  }
+
+  if (document.getElementById('implicitRoot').checked) {
+    observer2 = new IntersectionObserver(onObserve, {
+      threshold: thresholdValue
+    })
+    $$('.box2').forEach(el => {
+      observer2.observe(el)
+    })
+  }
+
+  if (document.getElementById('crossDoc').checked) {
+    observer3 = new IntersectionObserver(onObserve, {
+      threshold: thresholdValue
+    })
+    $$('.box3').forEach(el => {
+      var target = el.contentDocument.getElementById("t");
+      target.id = el.id;
+      target.innerHTML = el.id;
+      observer3.observe(target);
+    })
+  }
+
+}
+
+
+</script>
+</body>
+</html>
+
