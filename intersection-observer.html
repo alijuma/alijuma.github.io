@@ -164,25 +164,25 @@
   </svg>
 </div>
 <div class="container3">
-  <iframe id="box20" class="box3" src="intersection-observer-frame.html">
+  <iframe id="box20" class="box3" src="intersection-observer-midframe.html">
   </iframe>
-  <iframe id="box21" class="box3" src="intersection-observer-frame.html">
+  <iframe id="box21" class="box3" src="intersection-observer-midframe.html">
   </iframe>
-  <iframe id="box22" class="box3" src="intersection-observer-frame.html" >
+  <iframe id="box22" class="box3" src="intersection-observer-midframe.html" >
   </iframe>
-  <iframe id="box23" class="box3" src="intersection-observer-frame.html" >
+  <iframe id="box23" class="box3" src="intersection-observer-midframe.html" >
   </iframe>
-  <iframe id="box24" class="box3" src="intersection-observer-frame.html">
+  <iframe id="box24" class="box3" src="intersection-observer-midframe.html">
   </iframe>
-  <iframe id="box25" class="box3" src="intersection-observer-frame.html">
+  <iframe id="box25" class="box3" src="intersection-observer-midframe.html">
   </iframe>
-  <iframe id="box26" class="box3" src="intersection-observer-frame.html">
+  <iframe id="box26" class="box3" src="intersection-observer-midframe.html">
   </iframe>
-  <iframe id="box27" class="box3" src="intersection-observer-frame.html">
+  <iframe id="box27" class="box3" src="intersection-observer-midframe.html">
   </iframe>
-  <iframe id="box28" class="box3" src="intersection-observer-frame.html">
+  <iframe id="box28" class="box3" src="intersection-observer-midframe.html">
   </iframe>
-  <iframe id="box29" class="box3" src="intersection-observer-frame.html">
+  <iframe id="box29" class="box3" src="intersection-observer-midframe.html">
   </iframe>
 </div>
 <div id="output">
@@ -320,7 +320,8 @@ function resetObservers() {
       threshold: thresholdValue
     })
     $$('.box3').forEach(el => {
-      var target = el.contentDocument.getElementById("t");
+      var targetFrame = el.contentDocument.getElementById("theframe");
+      var target = targetFrame.contentDocument.getElementById("t");
       target.id = el.id;
       target.innerHTML = el.id;
       observer3.observe(target);
