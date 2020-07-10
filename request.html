@@ -1,0 +1,13 @@
+<!DOCTYPE html>
+<script>
+  window.onload = function() { document.cookie = "CookieMonster"; }
+
+  function getAccess() {
+    document.requestStorageAccess().then(
+        () => { document.getElementById('message').innerHTML = "Storage access granted"; },
+        () => { document.getElementById('message').innerHTML = "Storage access denied"; }
+    );
+  }
+</script>
+<h1 id="message">Storage access has not been requested</h1>
+<button onclick="getAccess();">Click me!</button>
