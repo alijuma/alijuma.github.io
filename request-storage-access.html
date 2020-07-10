@@ -5,7 +5,7 @@
   function getAccess() {
     document.requestStorageAccess().then(
         () => { document.getElementById('message').innerHTML = "Storage access granted"; },
-        () => { document.getElementByID('message').innerHTML = "Storage access denied"; }
+        () => { document.getElementById('message').innerHTML = "Storage access denied"; }
     );
   }
 </script>
